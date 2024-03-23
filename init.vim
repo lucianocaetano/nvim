@@ -49,7 +49,8 @@ call plug#begin(stdpath('data').'/plugged')
     Plug 'robhudson/snipmate_for_django'
     " neoformat formateador de codigo para multiples lenguajes
     "Plug 'sbdchd/neoformat'
-
+    Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+    Plug 'junegunn/fzf.vim'
     Plug 'vim-autoformat/vim-autoformat'
 
     " NERDTree
@@ -365,8 +366,6 @@ colorscheme gruvbox
 let g:gruvbox_transparent_bg = 1
 let g:gruvbox_invert_tabline = 1
 let g:gruvbox_italicize_strings = 1
-let g:gruvbox_contrast_dark='hard'
-set background=dark
 "resaltar tabulaciones
 
 function HighlightsTabsAndSpace ()
@@ -411,3 +410,15 @@ let g:python_highlight_doctests = 1
 let g:python_highlight_class_vars = 1
 let g:python_highlight_file_headers_as_comments = 1
 let g:python_highlight_operators = 1
+
+let g:fzf_vim = {}
+let g:fzf_history_dir = '~/.cache/fzf'
+let g:fzf_layout = {
+            \ 'window': {
+            \ 'width': 0.89,
+            \ 'height': 0.74,
+            \ 'border': 'rounded'
+            \ }
+            \ }
+let $FZF_DEFAULT_OPTS="--layout=reverse --info=inline --preview-window=right:50% --prompt='> '"
+
