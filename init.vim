@@ -1,7 +1,8 @@
 syntax enable
-set guicursor=                                     " Disable blinking for the n-v-c modes
+set clipboard+=unnamedplus
 set termguicolors
-set guioptions-=T                                   " No Tool bar
+set noundofile
+
 set autoindent
 set cursorline                                     " Highlight the current line
 
@@ -9,14 +10,14 @@ set hidden                                         " When on a buffer becomes hi
 set path+=**
 set nowrap
 set encoding=UTF-8
-    
+
 set number relativenumber
 
 set smartindent
 set smarttab
 set tabstop=2 softtabstop=2
 set shiftwidth=2
-autocmd BufRead,BufNewFile *.php setlocal shiftwidth=4 softtabstop=4
+autocmd BufRead,BufNewFile *.php,*.py setlocal shiftwidth=4 softtabstop=4
 set expandtab
 set smartcase
 set incsearch
@@ -38,21 +39,24 @@ let g:python3_host_prog = '/home/{usuario}/.local/share/virtualenvs/{nvim-999999
 call plug#begin(stdpath('data').'/plugged')
     Plug 'Mofiqul/dracula.nvim'
     Plug 'sheerun/vim-polyglot'
+    Plug 'neoclide/coc-java', {'do': 'yarn install --frozen-lockfile'}
     " Markdown
     Plug 'arnaud-lb/vim-php-namespace'
     Plug '/yaegassy/coc-htmldjango'
     Plug 'mattn/emmet-vim'
     Plug 'edkolev/tmuxline.vim'
     Plug 'posva/vim-vue'
-    Plug 'vim-python/python-syntax'  
+    Plug 'vim-python/python-syntax'
+    Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
     Plug 'neoclide/coc-snippets'
     Plug 'robhudson/snipmate_for_django'
     " neoformat formateador de codigo para multiples lenguajes
-    "Plug 'sbdchd/neoformat'
+    " Plug 'sbdchd/neoformat'
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
     Plug 'vim-autoformat/vim-autoformat'
-
+    Plug 'sbdchd/neoformat'
+    
     " NERDTree
     Plug 'preservim/nerdtree'
 
@@ -63,7 +67,6 @@ call plug#begin(stdpath('data').'/plugged')
 
     " Or build from source code by using npm
     Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
-
     " Surround.vim
     Plug 'tpope/vim-surround'
 
@@ -79,7 +82,9 @@ call plug#end()
 
 let g:coc_global_extensions = [
       \ 'coc-cfn-lint',
+      \ 'coc-tsserver',
       \ 'coc-cspell-dicts',
+      \ 'coc-angular',
       \ 'coc-deno',
       \ 'coc-diagnostic',
       \ 'coc-docker',
@@ -92,13 +97,12 @@ let g:coc_global_extensions = [
       \ 'coc-spell-checker',
       \ 'coc-vetur',
       \ 'coc-yaml',
-      \ 'coc-python',
       \ 'coc-pairs',
       \ 'coc-explorer',
       \ 'coc-highlight',
       \ 'coc-phpls',
       \ 'coc-python'
-\ ]
+      \ ]
 " TextEdit might fail if hidden is not set.
 set hidden
 
@@ -157,7 +161,7 @@ inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 " Make <CR> to accept selected completion item or notify coc.nvim to format
 " <C-g>u breaks current undo, please make your own choice
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 function! CheckBackspace() abort
   let col = col('.') - 1
@@ -293,7 +297,7 @@ nnoremap <F2> :NERDTreeToggle<CR>
 nnoremap <F3> :bprevious<CR>
 nnoremap <F4> :bnext<CR>
 nnoremap <F5> :bdelete<CR>
-nnoremap <F1> :Neoformat<CR>  
+nnoremap <F1> :Neoformat<CR>
 
 " Mappings for CoCList
 " Show all diagnostics.
@@ -366,29 +370,10 @@ colorscheme gruvbox
 let g:gruvbox_transparent_bg = 1
 let g:gruvbox_invert_tabline = 1
 let g:gruvbox_italicize_strings = 1
-"resaltar tabulaciones
-
-function HighlightsTabsAndSpace ()
-call feedkeys(":set listchars=eol:¬,tab:\\|_,trail:~,extends:>,precedes:<,space:\\|\<CR>")
-call feedkeys(":set list\<CR>")
-endfunction
-
-nmap <F12> :call HighlightsTabsAndSpace()<CR>
-nmap <F11> :set nolist<CR>
-
-let g:python_highlight_exceptions = 1
-let g:python_highlight_string_formatting = 1
-let g:python_highlight_string_format = 1
-let g:python_highlight_indent_errors = 1
-let g:python_highlight_func_calls = 1
-let g:python_highlight_class_vars = 1
-let g:python_highlight_operators = 1
-let g:python_highlight_file_headers_as_comments = 1
-let g:python_highlight_builtins = 1
 
 function! IPhpInsertUse()
-    call PhpInsertUse()
-    call feedkeys('a',  'n')
+  call PhpInsertUse()
+  call feedkeys('a',  'n')
 endfunction
 autocmd FileType php inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
 autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
@@ -410,15 +395,42 @@ let g:python_highlight_doctests = 1
 let g:python_highlight_class_vars = 1
 let g:python_highlight_file_headers_as_comments = 1
 let g:python_highlight_operators = 1
+let g:python_highlight_exceptions = 1
+let g:python_highlight_string_formatting = 1
+let g:python_highlight_string_format = 1
+let g:python_highlight_indent_errors = 1
+let g:python_highlight_func_calls = 1
+let g:python_highlight_class_vars = 1
+let g:python_highlight_operators = 1
+let g:python_highlight_file_headers_as_comments = 1
+let g:python_highlight_builtins = 1
+
 
 let g:fzf_vim = {}
 let g:fzf_history_dir = '~/.cache/fzf'
 let g:fzf_layout = {
-            \ 'window': {
-            \ 'width': 0.89,
-            \ 'height': 0.74,
-            \ 'border': 'rounded'
-            \ }
-            \ }
+      \ 'window': {
+      \ 'width': 0.89,
+      \ 'height': 0.84,
+      \ }
+      \ }
+
+
 let $FZF_DEFAULT_OPTS="--layout=reverse --info=inline --preview-window=right:50% --prompt='> '"
+
+
+"tabine config
+"
+lua <<EOF
+  require('tabnine').setup({
+    disable_auto_comment=true,
+    accept_keymap="<Tab>",
+    dismiss_keymap = "<C-]>",
+    debounce_ms = 800,
+    suggestion_color = {gui = "#808080", cterm = 244},
+    exclude_filetypes = {"TelescopePrompt", "NvimTree"},
+    log_file_path = nil, -- absolute path to Tabnine log file
+  })
+EOF
+
 
