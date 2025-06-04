@@ -32,6 +32,9 @@ require("lazy").setup({
   { "rose-pine/neovim", name = "rose-pine" },
   { "dgox16/oldworld.nvim" },
   { "sainnhe/sonokai" },
+  { "folke/tokyonight.nvim", lazy = false, priority = 1000 },
+  { "shaunsingh/nord.nvim" },
+  { "folke/lsp-colors.nvim" },
 
   -- Soporte de sintaxis y lenguajes
   { "sheerun/vim-polyglot" },
@@ -49,7 +52,10 @@ require("lazy").setup({
   { "neoclide/coc.nvim", branch = "release" },
 
   -- Formateadores y autoformato
-  { 'mhartington/formatter.nvim' },
+  { 
+    'sbdchd/neoformat',
+    event = { "BufWritePre" }
+  },
 
   -- Explorador de archivos y UI
   { "preservim/nerdtree" },
@@ -66,6 +72,14 @@ require("lazy").setup({
   { "vim-airline/vim-airline" },
   { "vim-airline/vim-airline-themes" },
   { "preservim/nerdcommenter" },
+  -- nvim v0.7.2
+  {
+      "kdheepak/lazygit.nvim",
+      -- optional for floating window border decoration
+      requires = {
+          "nvim-lua/plenary.nvim",
+      },
+  }
 })
 
 require("setup")

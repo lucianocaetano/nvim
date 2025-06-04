@@ -1,4 +1,5 @@
-package.path = package.path .. ";/home/mauroc/.config/nvim/src/core/?.lua"
+package.path = package.path .. ";/home/mauro/.config/nvim/src/core/?.lua"
+
 require('options')
 require('plugins')
 require('keymaps')

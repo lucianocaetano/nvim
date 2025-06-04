@@ -1,0 +1,3 @@
+# /bin/bash
+
+export OPEN_ROUTER_TOKEN_API=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

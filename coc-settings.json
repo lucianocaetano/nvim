@@ -14,5 +14,6 @@
   "vetur.format.defaultFormatter.html": "prettier",
   "vetur.format.defaultFormatterOptions": {
     "wrapAttributes": "force-aligned"
-  }
+  },
+  "intelephense.environment.phpVersion": "8.1.0"
 }
